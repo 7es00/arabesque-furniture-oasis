@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form';
 import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
+import { Loader2 } from 'lucide-react';
 
 // Form Schema
 const formSchema = z.object({
@@ -38,6 +39,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const ContactForm = () => {
   const { language, dictionary } = useAppContext();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Initialize form
   const form = useForm<FormValues>({
@@ -53,6 +55,7 @@ const ContactForm = () => {
   // Form submission handler
   async function onSubmit(data: FormValues) {
     try {
+      setIsSubmitting(true);
       console.log('Form Data:', data);
       
       // Insert form data into Supabase
@@ -90,11 +93,13 @@ const ContactForm = () => {
           ? 'There was a problem sending your message. Please try again.' 
           : 'حدثت مشكلة في إرسال رسالتك. يرجى المحاولة مرة أخرى.'
       );
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   return (
-    <div>
+    <div className="bg-card rounded-lg p-6 shadow-sm">
       <h2 className="text-2xl font-serif font-bold mb-6">
         {language === 'en' ? 'Send Us a Message' : 'أرسل لنا رسالة'}
       </h2>
@@ -168,8 +173,19 @@ const ContactForm = () => {
             )}
           />
           
-          <Button type="submit" className="w-full">
-            {dictionary.send}
+          <Button 
+            type="submit" 
+            className="w-full" 
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {language === 'en' ? 'Sending...' : 'جارٍ الإرسال...'}
+              </>
+            ) : (
+              dictionary.send
+            )}
           </Button>
         </form>
       </Form>
