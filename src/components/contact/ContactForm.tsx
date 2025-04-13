@@ -188,6 +188,6 @@ const ContactForm = () => {
       </Form>
     </div>
   );
-};
+}
 
 export default ContactForm;
