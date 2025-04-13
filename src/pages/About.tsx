@@ -101,7 +101,7 @@ const AboutPage: React.FC = () => {
               {
                 title: language === 'en' ? 'Innovation' : 'الابتكار',
                 description: language === 'en' 
-                  ? 'While we honor traditional techniques, we also embrace innovation. We continuously explore new methods, materials, and technologies to enhance our furniture's quality and sustainability.' 
+                  ? 'While we honor traditional techniques, we also embrace innovation. We continuously explore new methods, materials, and technologies to enhance our furniture\'s quality and sustainability.' 
                   : 'بينما نكرم التقنيات التقليدية، فإننا نتبنى أيضًا الابتكار. نستكشف باستمرار طرقًا ومواد وتقنيات جديدة لتعزيز جودة واستدامة أثاثنا.'
               },
               {

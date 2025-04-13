@@ -77,7 +77,7 @@ const ContactPage: React.FC = () => {
             </h1>
             <p className="text-lg opacity-90">
               {language === 'en' 
-                ? 'We'd love to hear from you. Our friendly team is here to help.' 
+                ? 'We\'d love to hear from you. Our friendly team is here to help.' 
                 : 'نود أن نسمع منك. فريقنا الودود هنا للمساعدة.'}
             </p>
           </div>
