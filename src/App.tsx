@@ -18,7 +18,15 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// Initialize QueryClient with default options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

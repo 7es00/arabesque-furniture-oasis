@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from "sonner";
+import { supabase } from '@/lib/supabase';
 
 // Form Schema
 const formSchema = z.object({
@@ -50,14 +51,47 @@ const ContactForm = () => {
   });
 
   // Form submission handler
-  function onSubmit(data: FormValues) {
-    console.log('Form Data:', data);
-    toast.success(
-      language === 'en' 
-        ? 'Your message has been sent! We\'ll get back to you soon.' 
-        : 'تم إرسال رسالتك! سنعاود الاتصال بك قريبًا.'
-    );
-    form.reset();
+  async function onSubmit(data: FormValues) {
+    try {
+      console.log('Form Data:', data);
+      
+      // Insert form data into Supabase
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert([
+          { 
+            name: data.name,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+            created_at: new Date().toISOString()
+          }
+        ]);
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        toast.error(
+          language === 'en' 
+            ? 'There was a problem sending your message. Please try again.' 
+            : 'حدثت مشكلة في إرسال رسالتك. يرجى المحاولة مرة أخرى.'
+        );
+        return;
+      }
+      
+      toast.success(
+        language === 'en' 
+          ? 'Your message has been sent! We\'ll get back to you soon.' 
+          : 'تم إرسال رسالتك! سنعاود الاتصال بك قريبًا.'
+      );
+      form.reset();
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      toast.error(
+        language === 'en' 
+          ? 'There was a problem sending your message. Please try again.' 
+          : 'حدثت مشكلة في إرسال رسالتك. يرجى المحاولة مرة أخرى.'
+      );
+    }
   }
 
   return (
