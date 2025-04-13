@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from "sonner";
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 // Form Schema
 const formSchema = z.object({
@@ -55,18 +55,6 @@ const ContactForm = () => {
     try {
       console.log('Form Data:', data);
       
-      // Check if Supabase environment variables are set
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        console.warn('Supabase environment variables are not configured. Running in demo mode.');
-        toast.success(
-          language === 'en' 
-            ? 'Demo mode: Your message would be sent in production.' 
-            : 'وضع العرض التوضيحي: سيتم إرسال رسالتك في الإنتاج.'
-        );
-        form.reset();
-        return;
-      }
-      
       // Insert form data into Supabase
       const { error } = await supabase
         .from('contact_messages')
@@ -75,8 +63,7 @@ const ContactForm = () => {
             name: data.name,
             email: data.email,
             subject: data.subject,
-            message: data.message,
-            created_at: new Date().toISOString()
+            message: data.message
           }
         ]);
       
